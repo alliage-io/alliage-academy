@@ -1,0 +1,59 @@
+# Copyright 2022 ALLIAGE.IO
+# SPDX-License-Identifier: Apache-2.0
+
+---
+- name: check file exists in hdfs
+  become: yes
+  become_user: "{{ dataset_user }}"
+  shell: |
+      kinit -kt /home/{{ dataset_user }}/{{ dataset_user }}.keytab {{ dataset_user }}@REALM.TDP
+      hdfs dfs -test -f "datasets/{{ datasets.name }}/{{ datasets.name }}.{{ datasets.extension }}"
+  register: file_exists_hdfs
+  ignore_errors: true
+  no_log: yes
+
+- name: Get all users
+  getent:
+    database: passwd
+    split: ':'
+
+- name: Check that the user inputed is present
+  getent:
+    database: passwd
+    key: "{{ dataset_user }}"
+    fail_key: true
+
+- name: Stop if file exists
+  assert:
+    that:
+      - file_exists_hdfs.rc == 1
+    fail_msg: "File exists, no need to download"
+    success_msg: "File doesn't exist, proceed with download"
+
+- name: Download datasets to tmp with checksum
+  become: yes
+  become_user: "{{ dataset_user }}"
+  get_url:
+    url: "{{ datasets.url }}"
+    dest: "/tmp/{{ datasets.name }}.{{ datasets.extension }}"
+    checksum: md5:{{ datasets.checksum }}
+    timeout: 20
+  when: "datasets.compression|bool == false"
+
+- name: Download to tmp without checksum
+  become: yes
+  become_user: "{{ dataset_user }}"
+  get_url:
+    url: "{{ datasets.url }}"
+    dest: "/tmp/{{ datasets.name }}.{{ datasets.comp_type }}"
+    timeout: 20
+    owner: "{{ dataset_user }}"
+  when: "datasets.compression|bool ==true"
+
+- name: Decompress gz
+  become: yes
+  become_user: "{{ dataset_user }}"
+  shell: |
+    gzip -d -c /tmp/{{ datasets.name }}.{{ datasets.comp_type }} > /tmp/{{ datasets.name }}.{{ datasets.extension}}
+  when: "datasets.compression|bool == true"
+

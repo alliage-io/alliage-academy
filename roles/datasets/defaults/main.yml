@@ -1,0 +1,61 @@
+# Dataset Green Taxi Trip
+dataset_taxi:
+  url: "https://d37ci6vzurychx.cloudfront.net/trip-data/green_tripdata_2022-01.parquet"
+  url_frequence: [2022-04, 2022-03, 2022-02, 2022-01]
+  extension: parquet
+  compression: false
+  comp_type: null
+  range: [2013, 2022]
+  frequence: monthly
+  checksum: 05979422aac045f751da594792411e22
+  name: "nyc-taxi"
+
+# Dataset Mobi
+dataset_mobi:
+  url: "https://www.gutenberg.org/files/2701/2701-0.txt"
+  url_frequence: []
+  extension: txt
+  compression: false
+  comp_type: null
+  range: [2013, 2022]
+  frequence: monthly
+  checksum: a1e490b38837162d2b83fea611c6c868
+  name: "mobi-dick"
+
+# Dataset imdb
+dataset_imdb:
+  url: "https://datasets.imdbws.com/title.basics.tsv.gz"
+  url_frequence: []
+  extension: tsv
+  compression: true
+  comp_type: gz
+  range: [2013, 2022]
+  frequence: null
+  checksum: 
+  name: "imdb"
+
+datasets: "{{ lookup('vars','dataset_' + dataset) }}"
+# Dataset wikipedia
+# dataset_imdb:
+#   url: "https://www.wikidata.org/wiki/Wikidata:Database_download#JSON_dumps_(recommended)" # Not the link, but it's up there
+#   url_frequence: []
+#   extension: json
+#   compression: true
+#   comp_type: null
+#   range: [2013, 2022]
+#   frequence: null
+#   checksum:
+#   name: "imdb"
+
+# Alternative way of declaring vars
+# dataset_vars:
+#   url: "{{dataset_taxi.url if (dataset=='taxi') else dataset_mobi.url if (dataset=='mobi') else dataset_imdb.url}}"
+#   url_frequence: [2022-04, 2022-03, 2022-02, 2022-01]
+#   format: parquet
+#   extension: "{{dataset_taxi.extension if (dataset=='taxi') else dataset_mobi.extension if (dataset=='mobi') else dataset_imdb.extension }}"
+#   compilation: false
+#   comp_type: null
+#   range: [2013, 2022]
+#   frequence: monthly
+#   checksum: 
+#   name: "{{dataset_taxi.name if (dataset=='taxi') else dataset_mobi.name if (dataset=='mobi') else dataset_imdb.name }}"
