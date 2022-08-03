@@ -1,5 +1,3 @@
-Note: This is an MVP of a collection that provides access to datasets supporting Alliage Academy ](link.com) tutorials and documentation. Currently only datasets setup is provided.
-
 # Alliage Datasets
 
 The playbooks provide access to the following tasks in a single command:
@@ -11,11 +9,13 @@ The playbooks provide access to the following tasks in a single command:
 2. Create folder for selected user on hdfs
 3. Moves each dataset to hdfs
 
+It also allows to list the datasets in hdfs and to delete them.
 
-## How to install and use this collection with tdp-getting-started
+## Install collection with tdp-getting-started
 
 To use this collection with tdp-lib-getting-started:
 
+1. Clone [TDP Getting Started](https://github.com/TOSIT-IO/tdp-getting-started/)
 1. Replace the tdp-getting-started script in `scripts/setup.sh` with the `setup.sh` file in this repository.
 1. Install tdp-getting-started through tdp-lib with the same steps performed in their readme.
 2. Once deployed the commands to install the dataset script is available:
@@ -23,7 +23,7 @@ To use this collection with tdp-lib-getting-started:
 ```bash
 tdp deploy --target datasets_install # installs all dataset script
 ```
-## Use the tdp-gs command in the Edge-node
+## Use catasets command on the Edge-node
 
 SSH to the edge-node and log as a valid user (for instance, tdp_user):
 
@@ -44,8 +44,6 @@ Now you can use the following commands:
 ## TODO:
 
 - Complete README
-- Verify already installed datasets [x]
-- Option to delete specific datasets [x]
 - Input different users through the j2 template [ ]
 - Option to download dataset in selected time-frame [ ]
 - Spark job to change parquet to csv if needed [ ]

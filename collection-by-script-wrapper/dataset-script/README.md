@@ -1,5 +1,3 @@
-Note: This is an MVP of a collection that provides access to datasets supporting Alliage Academy ](link.com) tutorials and documentation. Currently only datasets setup is provided.
-
 # Alliage Datasets
 
 The script provide access to the following tasks in a single command:
