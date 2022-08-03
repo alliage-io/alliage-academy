@@ -1,0 +1,18 @@
+# Copyright 2022 ALLIAGE.IO
+# SPDX-License-Identifier: Apache-2.0
+
+---
+- name: "Setup All Datasets"
+  hosts: edge
+  tasks:
+    - name: All Dataset Install
+      include_role:
+        name: alliage.alliage_academy.datasets
+        tasks_from: install
+      vars:
+        dataset: "{{ item }}"
+        dataset_user: tdp_user
+      with_items:
+        - taxi
+        - mobi
+        - imdb

@@ -1,0 +1,20 @@
+# Copyright 2022 TOSIT.IO
+# SPDX-License-Identifier: Apache-2.0
+
+---
+- name: datasets_taxi_install
+  depends_on: []
+
+- name: datasets_taxi_config
+  depends_on:
+    - datasets_taxi_install
+
+- name: datasets_taxi_start
+  noop: yes
+  depends_on:
+    - datasets_taxi_config
+
+- name: datasets_taxi_init
+  noop: yes
+  depends_on:
+    - datasets_taxi_start

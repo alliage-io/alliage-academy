@@ -2,9 +2,9 @@ Note: This is an MVP of a collection that provides access to datasets supporting
 
 # Alliage Datasets
 
-The playbooks provide access to the following tasks through the command-line:
+The playbooks provide access to the following tasks with a single command:
 
-1. Download and verify chekcsums of three datasets:
+1. Download and verify chekcsums of three posible datasets:
    - NYC Taxi in parquet format.
    - IMDB in tsv format
    - Moby in txt format.
@@ -13,35 +13,25 @@ The playbooks provide access to the following tasks through the command-line:
 
 ## How to use
 
-The commands can be made available in three ways:
+To use this collection with tdp-lib-getting-started:
 
-- With TDP-getting-started: Connecting this collection that TDP that then can be called through an `ansible command`
-- With TDP-LIB: Use through tdp-lib. For more info move to the `tdp-lib` branch
-- With BASH-SCRIPT: Use through an edge-node. For more info move to the `bash-script` branch
-  
-**Use with TDP Getting Started:**
+1. Replace the tdp-getting-started script in `scripts/setup.sh` with the `setup.sh` file in this repository.
+1. Install tdp-getting-started through tdp-lib with the same steps performed in their readme.
+1. Once deployed the commands to install datasets are available to be used from the host machine through tdp-lib.
 
-The easiest way to interact with Alliage Collection Academy is by adding the collection on your tdp-getting-started repository.
-
-- Use the `main` branch of current repository
-- Install (tdp-getting-started)[https://github.com/TOSIT-IO/tdp-getting-started]
-
-After installing you can simply run the following command to download a dataset:
+To download all available datasetss:
 
 ```bash
-ansible-playbook deploy-datasets.yml -e "dataset=imdb dataset_user=tdp_user"
+tdp deploy --target datasets_config # installs all datasets
 ```
 
-To declare what username will deploy the command add `dataset_user=*yourusername*"`. The default will be `tdp_user`.
+To install only a specific datasets from the ones datasets provided in [Alliage](alliage/content/datasets), use one of the following:
 
-## TODO:
-
-- Complete README
-- Verify already installed datasets [x]
-- Option to delete specific datasets [x]
-- Option to download dataset in selected time-frame [ ]
-- Spark job to change parquet to csv if needed [ ]
-- Alliage Academy tutorials playbooks & test clusters [ ]
+```bash
+tdp deploy --target datasets_taxi_config
+tdp deploy --target datasets_imdb_config
+tdp deploy --target datasets_mobi_config
+```
 
 ## Architecture:
 

@@ -1,11 +1,14 @@
 # Copyright 2022 ALLIAGE.IO
 # SPDX-License-Identifier: Apache-2.0
 
---- 
-- name: "Setup Datasets"
+---
+- name: "Setup Taxi Datasets"
   hosts: edge
   tasks:
-    - import_role:
+    - name: Taxi Dataset Config
+      import_role:
         name: alliage.alliage_academy.datasets
         tasks_from: config
-      
+      vars: 
+        dataset: taxi
+        dataset_user: tdp_user

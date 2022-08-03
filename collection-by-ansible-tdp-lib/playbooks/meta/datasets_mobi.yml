@@ -1,0 +1,11 @@
+
+# Copyright 2022 ALLIAGE.IO
+# SPDX-License-Identifier: Apache-2.0
+
+---
+# datasets_install
+- import_playbook: ../datasets_mobi_install.yml
+# datasets_config
+- import_playbook: ../datasets_mobi_config.yml
+# datasets_start
+# datasets_init
