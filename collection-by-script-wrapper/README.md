@@ -23,7 +23,7 @@ To use this collection with tdp-lib-getting-started:
 ```bash
 tdp deploy --target datasets_install # installs all dataset script
 ```
-## Use catasets command on the Edge-node
+## Use datasets command on the Edge-node
 
 SSH to the edge-node and log as a valid user (for instance, tdp_user):
 
