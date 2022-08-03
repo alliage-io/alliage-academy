@@ -16,6 +16,7 @@ It also allows to list the datasets in hdfs and to delete them.
 From the edge node run the following commands:
 
 ```bash
+vagrant ssh edge-01.tdp
 sudo su
 cd /home/tdp_user
 curl -LJO https://raw.githubusercontent.com/alliage-io/alliage-collection-academy/tdp-datasets-script/datasets.sh
