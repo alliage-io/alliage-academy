@@ -1,0 +1,21 @@
+# Copyright 2022 TOSIT.IO
+# SPDX-License-Identifier: Apache-2.0
+
+---
+- name: datasets_install
+  depends_on: []
+
+- name: datasets_config
+  noop: yes
+  depends_on:
+    - datasets_install
+
+- name: datasets_start
+  noop: yes
+  depends_on:
+    - datasets_config
+
+- name: datasets_init
+  noop: yes
+  depends_on:
+    - datasets_config
