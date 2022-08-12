@@ -75,7 +75,7 @@ for file in "${DATASETS_FILES[@]}"
 do
   file_url="${DATASETS_BASE_URL}${file}.gz"
   echo "Downloading $file_url to ${output_hdfs_path}/${file}"
-  curl "$file_url" | gzip -d | hdfs dfs -put - ${output_hdfs_path}/${file}
+  curl "$file_url" | gzip -d | hdfs dfs -put -f - ${output_hdfs_path}/${file}
 done
 
 exit 0
