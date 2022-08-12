@@ -161,7 +161,7 @@ do
   file_name="green_tripdata_${date}.parquet"
   file_url="${DATASET_BASE_URL}${file_name}"
   echo "Downloading $file_url to ${output_hdfs_path}/${file_name}"
-  curl "$file_url" |  hdfs dfs -put -f - ${output_hdfs_path}/${file_name}
+  curl "$file_url" | hdfs dfs -put -f - ${output_hdfs_path}/${file_name}
 done
 
 exit 0
