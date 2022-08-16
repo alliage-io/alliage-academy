@@ -152,16 +152,15 @@ else
   done
 fi
 
-# Create HDFS folder if doesn't exist
-output_hdfs_path="/user/${username}/${output_hdfs_dirname}"
-hdfs dfs -mkdir -p ${output_hdfs_path}
-
 # Download the dataset to HDFS, overwrite if exists
 trap 'exit 1' SIGINT
 for date in "${dates[@]}"
 do
   file_name="green_tripdata_${date}.parquet"
   file_url="${DATASET_BASE_URL}${file_name}"
+  IFS=- read -r year month <<< $date
+  output_hdfs_path="/user/${username}/${output_hdfs_dirname}/${year}"
+  hdfs dfs -mkdir -p ${output_hdfs_path}
   echo "Downloading $file_url to ${output_hdfs_path}/${file_name}"
   curl "$file_url" | hdfs dfs -put -f - ${output_hdfs_path}/${file_name}
 done
