@@ -16,9 +16,11 @@ longopts="from:,to:,username:,version,help"
 
 print_usage()
 {
-  echo "Download IMDb datasets."
+  echo "Download the NYC Green Taxi Trip datasets."
+  echo "Files are stored in the Parquet format in /user/{username}/${output_hdfs_dirname}/{year}/green_tripdata_{year}-{month}.parquet."
+  echo "The full dataset is 1.2GB, a single month goes from yGB to zGB."
   echo
-  echo "Usage: imdb.sh [OPTION...]"
+  echo "Usage: nyc-green-taxi-trip.sh [OPTION...]"
   echo
   echo "Options:"
   echo "--from                     month from which to download the dataset"

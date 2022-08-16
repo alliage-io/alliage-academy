@@ -22,6 +22,8 @@ longopts="username:,help,version"
 print_usage()
 {
   echo "Download IMDb datasets."
+  echo "File are stored in TSV format at /user/{username}/${output_hdfs_dirname}/{table_name}.tsv."
+  echo "The complete dataset is approximately 5.5GB."
   echo
   echo "Usage: imdb.sh [OPTION...]"
   echo
