@@ -18,7 +18,7 @@ print_usage()
 {
   echo "Download the NYC Green Taxi Trip datasets."
   echo "Files are stored in the Parquet format in /user/{username}/${output_hdfs_dirname}/{year}/green_tripdata_{year}-{month}.parquet."
-  echo "The full dataset is 1.2GB, a single month goes from yGB to zGB."
+  echo "The full dataset is 1.2GB."
   echo
   echo "Usage: nyc-green-taxi-trip.sh [OPTION...]"
   echo
