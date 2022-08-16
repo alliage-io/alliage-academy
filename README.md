@@ -1,9 +1,33 @@
-This are MVP collection that provides access to datasets supporting [Alliage Academy](link.com) tutorials and documentation. Currently only datasets setup is provided.
+# Alliage Academy
 
-# Options:
+This repository provides assets used by [Alliage Academy](https://alliage.io/en/academy/).
 
-- [Collection-by-script-wrapper](collection-by-script-wrapper): Installs datasets script and command line alias in edge node.
-  - Can be used with tdp-lib
-  - Can be installed manually through the `dataset-script` folder
-- [Collection-by-modular-tdp-lib](collection-by-modular-tdp): Installs datasets script by playbook input.
-  - Modular installation roles. 
+It is intended to become an Ansible collection to interface more easily with the future releases of [TDP](https://github.com/TOSIT-IO/TDP).
+
+## Assets
+
+Only one asset is provided for now. More will be added as the platform develops.
+
+### Datasets
+
+These scripts make it easy to incorporate the datasets used in the tutorials of Alliage Academy into HDFS.
+
+#### Covered datasets
+
+- [`IMdB`]()
+- [`NYC Green Taxi Trip`]()
+
+#### Usage
+
+From an edge node of a TDP getting started cluster:
+
+  - without parameters:
+    ```
+    curl -s https://url/to/the/script | bash
+    ```
+  - with parameters:
+    ```
+    curl -s https://url/to/the/script | bash -s --option1 arg1
+    ```
+
+Use `--help` flag on both scripts for more information on how to use them.
