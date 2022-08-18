@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-SCRIPT_VERSION="0.0.0"
+SCRIPT_VERSION="0.0.1"
 DATASETS_FILES=(
   "name.basics.tsv"
   "title.akas.tsv"
@@ -11,9 +11,9 @@ DATASETS_FILES=(
   "title.ratings.tsv"
 )
 DATASETS_BASE_URL="https://datasets.imdbws.com/"
+OUTPUT_HDFS_DIRNAME="data/imdb"
 
 username="tdp_user"
-output_hdfs_dirname="imdb"
 
 # Options followed by a colon have a required argument
 shortopts="u:hV"
@@ -22,7 +22,7 @@ longopts="username:,help,version"
 print_usage()
 {
   echo "Download IMDb datasets."
-  echo "File are stored in TSV format at /user/{username}/${output_hdfs_dirname}/{table_name}.tsv."
+  echo "File are stored in TSV format at /user/{username}/${OUTPUT_HDFS_DIRNAME}/{table_name}.tsv."
   echo "The complete dataset is approximately 5.5GB."
   echo
   echo "Usage: imdb.sh [OPTION...]"
@@ -68,7 +68,7 @@ do
 done
 
 # Create HDFS folder if doesn't exist
-output_hdfs_path="/user/${username}/${output_hdfs_dirname}"
+output_hdfs_path="/user/${username}/${OUTPUT_HDFS_DIRNAME}"
 hdfs dfs -mkdir -p ${output_hdfs_path}
 
 # Download the dataset to HDFS, overwrite if exists
