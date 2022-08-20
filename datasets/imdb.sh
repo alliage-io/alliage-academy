@@ -10,7 +10,7 @@ DATASETS_FILES=(
   "title.principals.tsv"
   "title.ratings.tsv"
 )
-DATASETS_BASE_URL="https://datasets.imdbws.com/"
+SOURCE_BASE_URL=${SOURCE_BASE_URL:-"https://datasets.imdbws.com/"}
 TARGET_DIRECTORY=${TARGET_DIRECTORY:-"/user/tdp_user/data/imdb"}
 
 shortopts="t:hv"
@@ -76,7 +76,7 @@ hdfs dfs -mkdir -p ${target}
 trap 'exit 1' SIGINT
 for file in "${DATASETS_FILES[@]}"
 do
-  file_url="${DATASETS_BASE_URL}${file}.gz"
+  file_url="${SOURCE_BASE_URL}${file}.gz"
   echo "Downloading $file_url to ${target}/${file}"
   curl "$file_url" | gzip -d | hdfs dfs -put -f - "${target}/${file}"
 done
