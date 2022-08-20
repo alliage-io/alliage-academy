@@ -4,7 +4,7 @@ SCRIPT_VERSION="0.0.1"
 DATASET_BASE_URL="https://d37ci6vzurychx.cloudfront.net/trip-data/"
 DATASET_MIN_YEAR=2013
 DATASET_MAX_YEAR=2021
-TARGET_DIRECTORY="/user/tdp_user/data/nyc_green_taxi_trip"
+TARGET_DIRECTORY=${TARGET_DIRECTORY:-"/user/tdp_user/data/nyc_green_taxi_trip"}
 
 from="01-2013"
 to="12-2021"
@@ -17,6 +17,7 @@ print_usage()
   echo "Download the NYC Green Taxi Trip datasets."
   echo
   echo "The default target directory is \"${TARGET_DIRECTORY}\"."
+  echo "It is modifiable with the \"TARGET_DIRECTORY\" environmental variable."
   echo "File are stored in Parquet format as \"{year}/green_tripdata_{year}-{month}.parquet\""
   echo "There is one file per month."
   echo "The complete dataset is approximately 1.2GB."

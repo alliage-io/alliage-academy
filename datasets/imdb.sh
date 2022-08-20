@@ -11,7 +11,7 @@ DATASETS_FILES=(
   "title.ratings.tsv"
 )
 DATASETS_BASE_URL="https://datasets.imdbws.com/"
-TARGET_DIRECTORY="/user/tdp_user/data/imdb"
+TARGET_DIRECTORY=${TARGET_DIRECTORY:-"/user/tdp_user/data/imdb"}
 
 shortopts="t:hv"
 longopts="target:,help,version"
@@ -21,6 +21,7 @@ print_usage()
   echo "Download IMDb datasets."
   echo
   echo "The default target directory is \"${TARGET_DIRECTORY}\"."
+  echo "It is modifiable with the \"TARGET_DIRECTORY\" environmental variable."
   echo "File are stored in TSV format."
   echo "They are compressed with gzip and have the \".tsv.gz\" extension."
   echo "There is one file per table."
