@@ -50,8 +50,8 @@ opts=$(getopt -o "$shortopts" -l "$longopts" -- "$@")
 
 # Validate the input
 [ $? -eq 0 ] || {
-    echo "Incorrect options provided."
-    exit_abnormal
+  echo "Incorrect options provided."
+  exit_abnormal
 }
 
 # Get arguments from options
