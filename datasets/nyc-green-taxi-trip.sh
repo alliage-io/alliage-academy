@@ -4,22 +4,22 @@ SCRIPT_VERSION="0.0.1"
 DATASET_BASE_URL="https://d37ci6vzurychx.cloudfront.net/trip-data/"
 DATASET_MIN_YEAR=2013
 DATASET_MAX_YEAR=2021
-OUTPUT_HDFS_DIRNAME="data/nyc_green_taxi_trip"
+TARGET_DIRECTORY="/user/tdp_user/data/nyc_green_taxi_trip"
 
-username="tdp_user"
 from="01-2013"
 to="12-2021"
 
-# Options followed by a colon have a required argument
-shortopts="u:vh"
-longopts="from:,to:,username:,version,help"
+shortopts="t:vh"
+longopts="from:,to:,target:,version,help"
 
 print_usage()
 {
   echo "Download the NYC Green Taxi Trip datasets."
   echo
-  echo "Files are stored in the Parquet format in /user/{username}/${OUTPUT_HDFS_DIRNAME}/{year}/green_tripdata_{year}-{month}.parquet."
-  echo "The full dataset is 1.2GB."
+  echo "The default target directory is \"${TARGET_DIRECTORY}\"."
+  echo "File are stored in Parquet format as \"{year}/green_tripdata_{year}-{month}.parquet\""
+  echo "There is one file per month."
+  echo "The complete dataset is approximately 1.2GB."
   echo
   echo "Usage: nyc-green-taxi-trip.sh [OPTION...]"
   echo
@@ -30,7 +30,7 @@ print_usage()
   echo "--to                       month until which to download the dataset"
   echo "                           format: mm-yyyy"
   echo "                           default: 12-2021"
-  echo "-u, --username             HDFS user folder to which add the datasets"
+  echo "-t, --target               HDFS target directory"
   echo "-v, --version              print program version"
   echo "-h, --help                 print this help list"
   echo
@@ -59,16 +59,17 @@ eval set -- "$opts"
 while [ $# -gt 0 ]
 do
   case $1 in
-  -h|--help) print_usage; exit 0;;
+  -h|--help)    print_usage; exit 0;;
   -v|--version) print_version; exit 0;;
-  -u|--username) username="$2" ; shift;;
-  --from) from="$2" ; shift;;
-  --to) to="$2" ; shift;;
-  (--) shift; break;;
+  -t|--target)  shift; target="$1";;
+  --from)       shift; from="$1";;
+  --to)         shift; to="$1";;
+  (--)          shift; break;;
   (*) break;;
   esac
   shift
 done
+target=${target:-${TARGET_DIRECTORY} }
 
 # Spread dates
 IFS=- read -r from_month from_year <<< $from
@@ -160,10 +161,9 @@ do
   file_name="green_tripdata_${date}.parquet"
   file_url="${DATASET_BASE_URL}${file_name}"
   IFS=- read -r year month <<< $date
-  output_hdfs_path="/user/${username}/${OUTPUT_HDFS_DIRNAME}/${year}"
-  hdfs dfs -mkdir -p ${output_hdfs_path}
-  echo "Downloading $file_url to ${output_hdfs_path}/${file_name}"
-  curl "$file_url" | hdfs dfs -put -f - ${output_hdfs_path}/${file_name}
+  hdfs dfs -mkdir -p ${target}
+  echo "Downloading $file_url to ${target}/${file_name}"
+  curl "$file_url" | hdfs dfs -put -f - "${target}/${file_name}"
 done
 
 exit 0

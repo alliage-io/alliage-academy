@@ -11,25 +11,25 @@ DATASETS_FILES=(
   "title.ratings.tsv"
 )
 DATASETS_BASE_URL="https://datasets.imdbws.com/"
-OUTPUT_HDFS_DIRNAME="data/imdb"
+TARGET_DIRECTORY="/user/tdp_user/data/imdb"
 
-username="tdp_user"
-
-# Options followed by a colon have a required argument
-shortopts="u:hv"
-longopts="username:,help,version"
+shortopts="t:hv"
+longopts="target:,help,version"
 
 print_usage()
 {
   echo "Download IMDb datasets."
   echo
-  echo "File are stored in TSV format at /user/{username}/${OUTPUT_HDFS_DIRNAME}/{table_name}.tsv."
+  echo "The default target directory is \"${TARGET_DIRECTORY}\"."
+  echo "File are stored in TSV format."
+  echo "They are compressed with gzip and have the \".tsv.gz\" extension."
+  echo "There is one file per table."
   echo "The complete dataset is approximately 5.5GB."
   echo
   echo "Usage: imdb.sh [OPTION...]"
   echo
   echo "Options:"
-  echo "-u, --username             HDFS user folder to which add the datasets"
+  echo "-t, --target               HDFS target directory"
   echo "-v, --version              print program version"
   echo "-h, --help                 print this help list"
   echo
@@ -58,27 +58,26 @@ eval set -- "$opts"
 while [ $# -gt 0 ]
 do
   case $1 in
-  -h|--help) print_usage; exit 0;;
+  -h|--help)    print_usage; exit 0;;
   -v|--version) print_version; exit 0;;
-  # An additional shift is required for options with required arguments
-  -u|--username) username="$2" ; shift;;
-  (--) shift; break;;
-  (*) break;;
+  -t|--target)  shift; target="$1";;
+  (--)          shift; break;;
+  (*)           break;;
   esac
   shift
 done
+target=${target:-${TARGET_DIRECTORY} }
 
 # Create HDFS folder if doesn't exist
-output_hdfs_path="/user/${username}/${OUTPUT_HDFS_DIRNAME}"
-hdfs dfs -mkdir -p ${output_hdfs_path}
+hdfs dfs -mkdir -p ${target}
 
 # Download the dataset to HDFS, overwrite if exists
 trap 'exit 1' SIGINT
 for file in "${DATASETS_FILES[@]}"
 do
   file_url="${DATASETS_BASE_URL}${file}.gz"
-  echo "Downloading $file_url to ${output_hdfs_path}/${file}"
-  curl "$file_url" | gzip -d | hdfs dfs -put -f - ${output_hdfs_path}/${file}
+  echo "Downloading $file_url to ${target}/${file}"
+  curl "$file_url" | gzip -d | hdfs dfs -put -f - "${target}/${file}"
 done
 
 exit 0
