@@ -23,7 +23,7 @@ print_usage()
   echo "The default target directory is \"${IMDB_TARGET_DIRECTORY}\"."
   echo "It is modifiable with the \"IMDB_TARGET_DIRECTORY\" environmental variable."
   echo "File are stored in TSV format."
-  echo "They are compressed with gzip and have the \".tsv.gz\" extension."
+  echo "They are not compressed and have the \".tsv\" extension."
   echo "There is one file per table."
   echo "The complete dataset is approximately 5.5GB."
   echo
