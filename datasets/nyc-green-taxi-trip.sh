@@ -17,6 +17,7 @@ longopts="from:,to:,username:,version,help"
 print_usage()
 {
   echo "Download the NYC Green Taxi Trip datasets."
+  echo
   echo "Files are stored in the Parquet format in /user/{username}/${OUTPUT_HDFS_DIRNAME}/{year}/green_tripdata_{year}-{month}.parquet."
   echo "The full dataset is 1.2GB."
   echo
