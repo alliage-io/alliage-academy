@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-SCRIPT_VERSION="0.0.0"
+SCRIPT_VERSION="0.0.1"
 DATASET_BASE_URL="https://d37ci6vzurychx.cloudfront.net/trip-data/"
 DATASET_MIN_YEAR=2013
 DATASET_MAX_YEAR=2021
+OUTPUT_HDFS_DIRNAME="data/nyc_green_taxi_trip"
 
 username="tdp_user"
-output_hdfs_dirname="nyc_green_taxi_trip"
 from="01-2013"
 to="12-2021"
 
@@ -17,7 +17,7 @@ longopts="from:,to:,username:,version,help"
 print_usage()
 {
   echo "Download the NYC Green Taxi Trip datasets."
-  echo "Files are stored in the Parquet format in /user/{username}/${output_hdfs_dirname}/{year}/green_tripdata_{year}-{month}.parquet."
+  echo "Files are stored in the Parquet format in /user/{username}/${OUTPUT_HDFS_DIRNAME}/{year}/green_tripdata_{year}-{month}.parquet."
   echo "The full dataset is 1.2GB."
   echo
   echo "Usage: nyc-green-taxi-trip.sh [OPTION...]"
@@ -159,7 +159,7 @@ do
   file_name="green_tripdata_${date}.parquet"
   file_url="${DATASET_BASE_URL}${file_name}"
   IFS=- read -r year month <<< $date
-  output_hdfs_path="/user/${username}/${output_hdfs_dirname}/${year}"
+  output_hdfs_path="/user/${username}/${OUTPUT_HDFS_DIRNAME}/${year}"
   hdfs dfs -mkdir -p ${output_hdfs_path}
   echo "Downloading $file_url to ${output_hdfs_path}/${file_name}"
   curl "$file_url" | hdfs dfs -put -f - ${output_hdfs_path}/${file_name}
