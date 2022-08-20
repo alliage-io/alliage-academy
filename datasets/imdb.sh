@@ -16,7 +16,7 @@ OUTPUT_HDFS_DIRNAME="data/imdb"
 username="tdp_user"
 
 # Options followed by a colon have a required argument
-shortopts="u:hV"
+shortopts="u:hv"
 longopts="username:,help,version"
 
 print_usage()
@@ -30,7 +30,7 @@ print_usage()
   echo
   echo "Options:"
   echo "-u, --username             HDFS user folder to which add the datasets"
-  echo "-V, --version              print program version"
+  echo "-v, --version              print program version"
   echo "-h, --help                 print this help list"
   echo
 }
@@ -59,7 +59,7 @@ while [ $# -gt 0 ]
 do
   case $1 in
   -h|--help) print_usage; exit 0;;
-  -V|--version) print_version; exit 0;;
+  -v|--version) print_version; exit 0;;
   # An additional shift is required for options with required arguments
   -u|--username) username="$2" ; shift;;
   (--) shift; break;;

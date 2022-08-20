@@ -11,7 +11,7 @@ from="01-2013"
 to="12-2021"
 
 # Options followed by a colon have a required argument
-shortopts="u:Vh"
+shortopts="u:vh"
 longopts="from:,to:,username:,version,help"
 
 print_usage()
@@ -31,7 +31,7 @@ print_usage()
   echo "                           format: mm-yyyy"
   echo "                           default: 12-2021"
   echo "-u, --username             HDFS user folder to which add the datasets"
-  echo "-V, --version              print program version"
+  echo "-v, --version              print program version"
   echo "-h, --help                 print this help list"
   echo
 }
@@ -60,7 +60,7 @@ while [ $# -gt 0 ]
 do
   case $1 in
   -h|--help) print_usage; exit 0;;
-  -V|--version) print_version; exit 0;;
+  -v|--version) print_version; exit 0;;
   -u|--username) username="$2" ; shift;;
   --from) from="$2" ; shift;;
   --to) to="$2" ; shift;;
