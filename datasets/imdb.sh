@@ -10,8 +10,8 @@ DATASETS_FILES=(
   "title.principals.tsv"
   "title.ratings.tsv"
 )
-SOURCE_BASE_URL=${SOURCE_BASE_URL:-"https://datasets.imdbws.com/"}
-TARGET_DIRECTORY=${TARGET_DIRECTORY:-"/user/tdp_user/data/imdb"}
+IMDB_SOURCE_BASE_URL=${IMDB_SOURCE_BASE_URL:-"https://datasets.imdbws.com/"}
+IMDB_TARGET_DIRECTORY=${IMDB_TARGET_DIRECTORY:-"/user/tdp_user/data/imdb"}
 
 shortopts="t:hv"
 longopts="target:,help,version"
@@ -20,8 +20,8 @@ print_usage()
 {
   echo "Download IMDb datasets."
   echo
-  echo "The default target directory is \"${TARGET_DIRECTORY}\"."
-  echo "It is modifiable with the \"TARGET_DIRECTORY\" environmental variable."
+  echo "The default target directory is \"${IMDB_TARGET_DIRECTORY}\"."
+  echo "It is modifiable with the \"IMDB_TARGET_DIRECTORY\" environmental variable."
   echo "File are stored in TSV format."
   echo "They are compressed with gzip and have the \".tsv.gz\" extension."
   echo "There is one file per table."
@@ -67,7 +67,7 @@ do
   esac
   shift
 done
-target=${target:-${TARGET_DIRECTORY} }
+target=${target:-${IMDB_TARGET_DIRECTORY} }
 
 # Create HDFS folder if doesn't exist
 hdfs dfs -mkdir -p ${target}
@@ -76,7 +76,7 @@ hdfs dfs -mkdir -p ${target}
 trap 'exit 1' SIGINT
 for file in "${DATASETS_FILES[@]}"
 do
-  file_url="${SOURCE_BASE_URL}${file}.gz"
+  file_url="${IMDB_SOURCE_BASE_URL}${file}.gz"
   echo "Downloading $file_url to ${target}/${file}"
   curl "$file_url" | gzip -d | hdfs dfs -put -f - "${target}/${file}"
 done

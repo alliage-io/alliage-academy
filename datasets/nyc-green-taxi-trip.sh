@@ -3,8 +3,8 @@
 SCRIPT_VERSION="0.0.1"
 DATASET_MIN_YEAR=2013
 DATASET_MAX_YEAR=2021
-SOURCE_BASE_URL=${SOURCE_BASE_URL:-"https://d37ci6vzurychx.cloudfront.net/trip-data/"}
-TARGET_DIRECTORY=${TARGET_DIRECTORY:-"/user/tdp_user/data/nyc_green_taxi_trip"}
+NYC_SOURCE_BASE_URL=${NYC_SOURCE_BASE_URL:-"https://d37ci6vzurychx.cloudfront.net/trip-data/"}
+NYC_TARGET_DIRECTORY=${NYC_TARGET_DIRECTORY:-"/user/tdp_user/data/nyc_green_taxi_trip"}
 
 from="01-2013"
 to="12-2021"
@@ -16,8 +16,8 @@ print_usage()
 {
   echo "Download the NYC Green Taxi Trip datasets."
   echo
-  echo "The default target directory is \"${TARGET_DIRECTORY}\"."
-  echo "It is modifiable with the \"TARGET_DIRECTORY\" environmental variable."
+  echo "The default target directory is \"${NYC_TARGET_DIRECTORY}\"."
+  echo "It is modifiable with the \"NYC_TARGET_DIRECTORY\" environmental variable."
   echo "File are stored in Parquet format as \"{year}/green_tripdata_{year}-{month}.parquet\""
   echo "There is one file per month."
   echo "The complete dataset is approximately 1.2GB."
@@ -70,7 +70,7 @@ do
   esac
   shift
 done
-target=${target:-${TARGET_DIRECTORY} }
+target=${target:-${NYC_TARGET_DIRECTORY} }
 
 # Spread dates
 IFS=- read -r from_month from_year <<< $from
@@ -160,7 +160,7 @@ trap 'exit 1' SIGINT
 for date in "${dates[@]}"
 do
   file_name="green_tripdata_${date}.parquet"
-  file_url="${SOURCE_BASE_URL}${file_name}"
+  file_url="${NYC_SOURCE_BASE_URL}${file_name}"
   IFS=- read -r year month <<< $date
   hdfs dfs -mkdir -p ${target}
   echo "Downloading $file_url to ${target}/${file_name}"
