@@ -70,7 +70,7 @@ do
   esac
   shift
 done
-target=${target:-${NYC_TARGET_DIRECTORY} }
+target=${target:-${NYC_TARGET_DIRECTORY}}
 
 # Spread dates
 IFS=- read -r from_month from_year <<< $from
