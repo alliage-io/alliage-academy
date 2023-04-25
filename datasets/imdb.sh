@@ -67,7 +67,7 @@ do
   esac
   shift
 done
-target=${target:-${IMDB_TARGET_DIRECTORY} }
+target=${target:-${IMDB_TARGET_DIRECTORY}}
 
 # Create HDFS folder if doesn't exist
 hdfs dfs -mkdir -p ${target}
