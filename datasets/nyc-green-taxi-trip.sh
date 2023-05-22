@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
 SCRIPT_VERSION="0.0.1"
-DATASET_MIN_YEAR=2013
+DATASET_MIN_YEAR=2015
 DATASET_MAX_YEAR=2021
 NYC_SOURCE_BASE_URL=${NYC_SOURCE_BASE_URL:-"https://d37ci6vzurychx.cloudfront.net/trip-data/"}
 NYC_TARGET_DIRECTORY=${NYC_TARGET_DIRECTORY:-"/user/tdp_user/data/nyc_green_taxi_trip"}
 
-from="01-2013"
+from="01-2015"
 to="12-2021"
 
 shortopts="t:vh"
