@@ -1,16 +1,18 @@
 #!/usr/bin/env bash
 
-SCRIPT_VERSION="0.0.1"
-DATASET_MIN_YEAR=2015
-DATASET_MAX_YEAR=2021
+SCRIPT_VERSION="0.0.5"
+DATASET_MIN_YEAR=2009
+DATASET_MAX_YEAR=2023
 NYC_SOURCE_BASE_URL=${NYC_SOURCE_BASE_URL:-"https://d37ci6vzurychx.cloudfront.net/trip-data/"}
-NYC_TARGET_DIRECTORY=${NYC_TARGET_DIRECTORY:-"/user/tdp_user/data/nyc_green_taxi_trip"}
+DATASET_LIST=("green" "yellow" "fhv" "fhvhv")
 
-from="01-2015"
-to="12-2021"
+
+dataset="${DATASET_LIST[0]}"
+from="01-""$DATASET_MIN_YEAR"
+to="12-""$DATASET_MAX_YEAR"
 
 shortopts="t:vh"
-longopts="from:,to:,target:,version,help"
+longopts="from:,to:,target:,dataset:,version,help"
 
 print_usage()
 {
@@ -18,19 +20,21 @@ print_usage()
   echo
   echo "The default target directory is \"${NYC_TARGET_DIRECTORY}\"."
   echo "It is modifiable with the \"NYC_TARGET_DIRECTORY\" environmental variable."
-  echo "File are stored in Parquet format as \"{year}/green_tripdata_{year}-{month}.parquet\""
+  echo "File are stored in Parquet format as \"{dataset}_tripdata_{year}-{month}.parquet\""
   echo "There is one file per month."
-  echo "The complete dataset is approximately 1.2GB."
+  echo "The complete dataset is approximately 1.2GB for green."
   echo
   echo "Usage: nyc-green-taxi-trip.sh [OPTION...]"
   echo
   echo "Options:"
   echo "--from                     month from which to download the dataset"
   echo "                           format: mm-yyyy"
-  echo "                           default: 01-2013"
+  echo "                           default: \"$from\" "
   echo "--to                       month until which to download the dataset"
   echo "                           format: mm-yyyy"
-  echo "                           default: 12-2021"
+  echo "                           default: \"$to\" "
+  echo "--dataset                  dataset from tlc : yellow, green, fhv or fhvhv "
+  echo "                           default: \"$dataset\" "
   echo "-t, --target               HDFS target directory"
   echo "-v, --version              print program version"
   echo "-h, --help                 print this help list"
@@ -38,7 +42,7 @@ print_usage()
 }
 
 exit_abnormal() {
-  echo "Try 'nyc-green-taxi-trip.sh --help' for more information."
+  echo "Try \"$0\" --help' for more information."
   exit 1
 }
 
@@ -65,11 +69,20 @@ do
   -t|--target)  shift; target="$1";;
   --from)       shift; from="$1";;
   --to)         shift; to="$1";;
+  --dataset)    shift; dataset="$1";;
   (--)          shift; break;;
   (*) break;;
   esac
   shift
 done
+
+if [[ -z "$dataset" ]] || ! echo "${DATASET_LIST[@]}" | grep -qw "$dataset"; then
+   echo "Error: Invalid dataset."
+   exit_abnormal
+fi
+
+
+NYC_TARGET_DIRECTORY=${NYC_TARGET_DIRECTORY:-"/user/tdp_user/data/nyc_""$dataset""_taxi_trip"}
 target=${target:-${NYC_TARGET_DIRECTORY}}
 
 # Spread dates
@@ -132,7 +145,7 @@ if [ $from_year -eq $to_year ]
 then
   for month in $(seq -f "%02g" $from_month $to_month)
   do
-    dates+=("${from_year}-${month}")
+   dates+=("${from_year}-${month}")
   done
 else
   # First year
@@ -157,14 +170,25 @@ fi
 
 # Download the dataset to HDFS, overwrite if exists
 trap 'exit 1' SIGINT
+
+
+hdfs dfs -mkdir -p ${target}
+
 for date in "${dates[@]}"
 do
-  file_name="green_tripdata_${date}.parquet"
+  file_name="$dataset""_tripdata_${date}.parquet"
   file_url="${NYC_SOURCE_BASE_URL}${file_name}"
-  IFS=- read -r year month <<< $date
-  hdfs dfs -mkdir -p ${target}
-  echo "Downloading $file_url to ${target}/${file_name}"
-  curl "$file_url" | hdfs dfs -put -f - "${target}/${file_name}"
+  #IFS=- read -r year month <<< $date
+
+  # Check if the file exists using curl's --head option
+  response=$(curl  --head -w %{http_code} -o /dev/null --silent "$file_url")
+
+  if [ "$response" == "200" ]; then
+    echo "Downloading $file_url to ${target}"
+    curl "$file_url" | hdfs dfs -put -f - "${target}/${file_name}"
+  else
+    echo "File $file_url not available (response: $response )."
+  fi
 done
 
 exit 0
