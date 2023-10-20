@@ -10,3 +10,9 @@ The following datasets are used across the various labs from Alliage Academy. Ea
 
 - [`IMdB`](https://alliage.io/en/academy/datasets/imdb)
 - [`NYC Green Taxi Trip`](https://alliage.io/en/academy/datasets/taxitrip)
+
+## Iceberg
+
+PySpark program to test the gain in speed of query execution on an Iceberg table.
+
+A notebook to visualize this gain, on the docker-compose image proposed by Apache Iceberg.
